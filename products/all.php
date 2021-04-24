@@ -1,7 +1,11 @@
 <?php include "../validate_session.php" ?>
 <?php
 //Global Page Variables
-$pageName = "Site Visits | All"
+$pageName = "Products | All";
+$itemCode = "";
+if(isset($_GET["itemCode"])){
+    $itemCode = $_GET["itemCode"];
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +13,7 @@ $pageName = "Site Visits | All"
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NYPhone Analytics | <?php echo $pageName ?></title>
+  <title>SellioMarket Prices Database | <?php echo $pageName ?></title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -51,22 +55,52 @@ $pageName = "Site Visits | All"
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+
+      <div class="row">
+          <div class="col-12">
+      <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Search Products</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="products_by_site.php" method="get">
+                <div class="card-body">
+                <div class="form-group">
+                  <input class="custom-select form-control-border" id="siteSelector" name="itemCode">
+                  </select>
+                </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </form>
+            </div>
+        </div>
+        </div>
+
         <div class="row">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">All Site Visits of Users</h3>
+                <h3 class="card-title">All Products</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>IP Address</th>
-                    <th>Page Visited</th>
-                    <th>Date Stamp</th>
-                    <th>Date</th>
-                    <th>Action(s)</th>
+                    <th>Item Code</th>
+                    <th>Item Name</th>
+                    <th>Item Type</th>
+                    <th>Manufacturer</th>
+                    <th>Unit Quantity</th>
+                    <th>Manufacturer Description</th>
+                    <th>Quantity</th>
+                    <th>Unit of Measure</th>
+                    <th>Quantity in Package</th>
+                    <th>Operations</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -76,21 +110,25 @@ $pageName = "Site Visits | All"
                     $current_time = time();
                     $start_time = 0;
 
-                    $sql = "SELECT * FROM site_visits WHERE date>".$start_time;
+                    $sql = "SELECT * FROM tb_products";
 
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         // output data of each row
                         while($row = $result->fetch_assoc()) {
-                            $timestamp = intval($row["date"]);
-                            $dateFormatted = date('m/d/Y H:i:s', $timestamp);
                             echo "<tr>
-                            <td>".$row["ip"]."</td>
-                            <td>".$row["page_view"]."</td>
-                            <td>".$row["date"]."</td>
-                            <td>".$dateFormatted."</td>
-                            <td>"."<a href='../utils/visits_by_ip.php?ip=".$row["ip"]."&time=all'>All visits by IP</a>"."</td>
+                            <td>".$row["ItemCode"]."</td>
+                            <td>".$row["ItemName"]."</td>
+                            <td>".$row["ItemType"]."</td>
+                            <td>"."<a target='_blank' href=manufacturer.php?id='".$row["ManufacturerID"]."'>View Details</a>"."</td>
+                            <td>".$row["UnitQty"]."</td>
+                            <td>".$row["ManufacturerDescription"]."</td>
+                            <td>".$row["Quantity"]."</td>
+                            <td>".$row["UnitOfMeasure"]."</td>
+                            <td>".$row["QtyInPackage"]."</td>
+                            <td>"."<a target='_blank' href=product_companies.php?id='".$row["ManufacturerID"]."'>Companies</a>"."<br>".
+                            "<a target='_blank' href=edit_product.php?itemCode=".$row["ItemCode"].">Edit</a>"."</td>
                             </tr>";
                         }
                     } else {

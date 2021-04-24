@@ -1,7 +1,7 @@
 <?php include "validate_session.php" ?>
 <?php
 //Global Page Variables
-$pageName = "Dashboard";
+$pageName = "Stats";
 include "mysql_connection.php";
 ?>
 
@@ -47,33 +47,8 @@ include "mysql_connection.php";
     <!-- Main content -->
     <section class="content">
 
-          <!-- Default box -->
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Welcome</h3>
-
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              Please select analytics mode from side menu to proceed.
-            </div>
-            <!-- /.card-body -->
-            <div class="card-footer">
-            SellioMarket Prices Database Panel
-            </div>
-            <!-- /.card-footer-->
-          </div>
-          <!-- /.card -->
-
-          <!-- Default box -->
-          <div class="card">
+      <!-- Default box -->
+      <div class="card">
         <div class="card-header">
           <h3 class="card-title">Stats</h3>
 

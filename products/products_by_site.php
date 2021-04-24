@@ -1,7 +1,12 @@
-<?php include "../validate_session.php" ?>
+<?php include "../validate_session.php" 
+?>
 <?php
 //Global Page Variables
-$pageName = "Site Visits | 7 Days"
+$pageName = "Products | By Site";
+$selectedSiteName = "site1";
+if(isset($_GET["sitename"])){
+    $selectedSiteName = $_GET["sitename"];
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +14,7 @@ $pageName = "Site Visits | 7 Days"
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NYPhone Analytics | <?php echo $pageName ?></title>
+  <title>SellioMarket Prices Database | <?php echo $pageName ?></title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -51,46 +56,81 @@ $pageName = "Site Visits | 7 Days"
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+
+      <div class="row">
+          <div class="col-12">
+      <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Select Site</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="products_by_site.php" method="get">
+                <div class="card-body">
+                <div class="form-group">
+                  <select class="custom-select form-control-border" id="siteSelector" name="sitename">
+                    <option value="site1" <?php if($selectedSiteName=="site1"){echo "selected";} ?>>Site 1</option>
+                    <option value="site2" <?php if($selectedSiteName=="site2"){echo "selected";} ?>>Site 2</option>
+                    <option value="site2" <?php if($selectedSiteName=="site3"){echo "selected";} ?>>Site 3</option>
+                  </select>
+                </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+            </div>
+        </div>
+        </div>
+
         <div class="row">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Site Visits of Users From Last 7 Days</h3>
+                <h3 class="card-title">Results</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>IP Address</th>
-                    <th>Page Visited</th>
-                    <th>Date Stamp</th>
                     <th>Date</th>
-                    <th>Action(s)</th>
+                    <th>Item Code</th>
+                    <th>Item Name</th>
+                    <th>Item Type</th>
+                    <th>Manufacturer</th>
+                    <th>Unit Quantity</th>
+                    <th>Quantity</th>
+                    <th>Unit Measure</th>
+                    <th>Quantity in Package</th>
+                    <th>Item Price</th>
+                    <th>Unit of Measure Price</th>
+                    <th>Site</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php
                     include "../mysql_connection.php";
-
                     $current_time = time();
-                    $start_time = strtotime("-7 days", $current_time);
-
-                    $sql = "SELECT * FROM site_visits WHERE date>".$start_time;
-
+                    $start_time = 0;
+                    $sql = "SELECT * FROM products WHERE site='".$selectedSiteName."'";
                     $result = $conn->query($sql);
-
                     if ($result->num_rows > 0) {
-                        // output data of each row
                         while($row = $result->fetch_assoc()) {
-                            $timestamp = intval($row["date"]);
-                            $dateFormatted = date('m/d/Y H:i:s', $timestamp);
                             echo "<tr>
-                            <td>".$row["ip"]."</td>
-                            <td>".$row["page_view"]."</td>
-                            <td>".$row["date"]."</td>
-                            <td>".$dateFormatted."</td>
-                            <td>"."<a href='../utils/visits_by_ip.php?ip=".$row["ip"]."&time=week'>All visits by IP</a>"."</td>
+                            <td>".$row["priceUpdateDate"]."</td>
+                            <td>".$row["itemCode"]."</td>
+                            <td>".$row["itemName"]."</td>
+                            <td>".$row["itemType"]."</td>
+                            <td>"."<a target='_blank' href=manufacturer.php?id='".$row["manufacturerName"]."'>View Details</a>"."</td>
+                            <td>".$row["unitQty"]."</td>
+                            <td>".$row["quantity"]."</td>
+                            <td>".$row["unitMeasure"]."</td>
+                            <td>".$row["qtyPackage"]."</td>
+                            <td>".$row["itemPrice"]."</td>
+                            <td>".$row["unitOfMeasurePrice"]."</td>
+                            <td>".$row["site"]."</td>
                             </tr>";
                         }
                     } else {

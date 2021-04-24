@@ -63,9 +63,7 @@ $pageName = "Visits Per IP | 30 Days"
                   <thead>
                   <tr>
                     <th>IP Address</th>
-                    <th>Page Visited</th>
-                    <th>Date Stamp</th>
-                    <th>Date</th>
+                    <th>Total Count</th>
                     <th>Action(s)</th>
                   </tr>
                   </thead>

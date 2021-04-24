@@ -1,7 +1,7 @@
 <?php include "../validate_session.php" ?>
 <?php
 //Global Page Variables
-$pageName = "Site Visits | 30 Days"
+$pageName = "Products | All"
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +9,7 @@ $pageName = "Site Visits | 30 Days"
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NYPhone Analytics | <?php echo $pageName ?></title>
+  <title>SellioMarket Prices Database | <?php echo $pageName ?></title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -55,42 +55,35 @@ $pageName = "Site Visits | 30 Days"
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Site Visits of Users From Last 30 Days</h3>
+                <h3 class="card-title">All Products</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>IP Address</th>
-                    <th>Page Visited</th>
-                    <th>Date Stamp</th>
-                    <th>Date</th>
-                    <th>Action(s)</th>
+                    <th>Manufacturer ID</th>
+                    <th>Manufacturer Name</th>
+                    <th>Manufacturer Country</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php
                     include "../mysql_connection.php";
 
-                    $current_time = time();
-                    $start_time = strtotime("-30 days", $current_time);
-
-                    $sql = "SELECT * FROM site_visits WHERE date>".$start_time;
+                    $sql = "SELECT * FROM tb_manufacturer";
 
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         // output data of each row
                         while($row = $result->fetch_assoc()) {
-                            $timestamp = intval($row["date"]);
-                            $dateFormatted = date('m/d/Y H:i:s', $timestamp);
+                            //$timestamp = intval($row["date"]);
+                            //$dateFormatted = date('m/d/Y H:i:s', $timestamp);
                             echo "<tr>
-                            <td>".$row["ip"]."</td>
-                            <td>".$row["page_view"]."</td>
-                            <td>".$row["date"]."</td>
-                            <td>".$dateFormatted."</td>
-                            <td>"."<a href='../utils/visits_by_ip.php?ip=".$row["ip"]."&time=month'>All visits by IP</a>"."</td>
+                            <td>".$row["ID"]."</td>
+                            <td>".$row["Name"]."</td>
+                            <td>".$row["Country"]."</td>
                             </tr>";
                         }
                     } else {
